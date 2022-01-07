@@ -9,12 +9,16 @@ import { NgxCaptchaModule } from 'ngx-captcha';
 
 import { HttpClientModule } from '@angular/common/http';
 import { HttpService } from './Shared/http.service';
+import { ListaClientesComponent } from './components/lista-clientes/lista-clientes.component';
+import { NavComponent } from './components/nav/nav.component';
 // import { CreateDirectivaOwn} from './customvalidators.directive'; 
 
 @NgModule({
   declarations: [
     AppComponent,
     FormComponent,
+    ListaClientesComponent,
+    NavComponent,
     // myValidators
   ],
   imports: [
