@@ -7,7 +7,8 @@ const routes: Routes = [
   // redireccion de inicio de pagina
   { path:'', redirectTo: 'lista-clientes', pathMatch:'full'},
   { path: 'lista-clientes', component: ListaClientesComponent},
-  { path: 'form', component: FormComponent}
+  { path: 'form', component: FormComponent},
+  { path:'**', redirectTo: 'lista-clientes', pathMatch:'full'}
 ];
 
 @NgModule({
