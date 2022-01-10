@@ -29,12 +29,6 @@ export class FormComponent implements OnInit {
 
   estiloBoton: string;
 
-  figangular: string;
-  figreact: string;
-  figvue: string;
-  kotlin: string;
-  figuracurso: string;
-
   constructor(
     private formBuilder: FormBuilder,
     public http: HttpService,
@@ -50,14 +44,8 @@ export class FormComponent implements OnInit {
     this.id= this.aRoute.snapshot.paramMap.get('id');
     
     this.buildForm();
-    // this.siteKey = '6LdZU2MdAAAAAKQ-nJN-UuYbfQ-f_SYvqmYxJ_AT';
 
     this.estiloBoton = 'desactivado';
-
-    // this.figangular = '1eGYL_Z5wN2MvZjy52PhrmkbmvGwZ8Mad';
-    // this.figreact = '19JGL0BpsgfDOr77DX6MS-xOTBXG04-by';
-    // this.figvue = '1njGX79tnL8A4ioL1UDO0Cs5H9foMxTXO';
-    // this.kotlin = '1w1dK5c-CN70zCc22sN3EM_4WgP89pX-5';
    }
 
    ngOnInit() {
@@ -80,8 +68,6 @@ export class FormComponent implements OnInit {
     this.estiloBoton = 'activado';
     event.preventDefault();
     console.log("Enviar");
-    //console.log(this.form);
-    //this.buttionText = "Enviando...";
     if(this.form.valid){
       this.estiloBoton = 'activado';
       const value = this.form.value;
@@ -139,87 +125,95 @@ export class FormComponent implements OnInit {
     this.form.patchValue( { name: '', telefono: '', email:'', sexo: '' });
      console.log(this.form);
      this.form.reset;
- }
-/*
- asignaCosto(){
-  if(this.cursoField.value == 'Angular'){
-    this.costo = 300;
-    this.figuracurso = this.figangular;
-  }else if(this.cursoField.value == 'React'){
-    this.costo = 230;
-    this.figuracurso = this.figreact;
-  }else if(this.cursoField.value == 'Vue'){
-    this.costo = 250;
-    this.figuracurso = this.figvue;
-  }else {
-    this.costo = 260;
-    this.figuracurso = this.figreact;
-  }
+     this.returnRuta.navigate(['/lista-clientes'])
  }
 
- asignaDescuento(){
-    if(this.personaField.value == 'Estudiante'){
-      this.descuento = 50;
-    }else if(this.personaField.value == 'Profesor'){
-      this.descuento = 25;
-    }else if(this.personaField.value == 'Profesional'){
-      this.descuento = 0;
-    }
- }
-
- calcCostoTotal(){
-  this.costoTotal = this.costo - (this.costo*this.descuento)/100;
- }
-*/
- register() {
-  this.loading = true;  
-  // this.asignaCosto();
-  // this.asignaDescuento();
-  // this.calcCostoTotal();
-  this.buttionText = "Enviando...";
-  /*  
-  let user = {
-    name: this.nameField.value,
-    email: this.emailField.value,
-    cedula: this.telefonoField.value, 
-    sexo: this.sexoField.value,
-    costo: this.costo,
-    descuento: this.descuento,
-    costoTotal: this.costoTotal,
-    figuracurso: this.figuracurso
-  }
-  */
-  
-  this.save(event);
-
-  /*
-  this.http.sendEmail("http://localhost:3000/sendmail", user).subscribe(
-    data => {
-      let res:any = data; 
-      console.log(
-        `👏 > 👏 > 👏 > 👏 ${user.name} enviaste el correo con éxito con el id: ${res.messageId}`
-      );
+ agregarEditarCliente(){
+    this.estiloBoton = 'activado';
+    event.preventDefault();
+    console.log("Enviar");
+    if(this.form.valid){
+      this.estiloBoton = 'activado';
+      const value = this.form.value;
+      const cliente = {
+        name: this.nameField.value,
+        email: this.emailField.value,
+        telefono: this.telefonoField.value, 
+        sexo: this.sexoField.value,
+        yfechaAgregado: new Date(),
+        zfechaActualizacion:  new Date()
+      }
+      this.spinner =true;
+      this._ServiceClientes.addCliente(cliente).then(() => {
+        console.log("registro agregado");
+        this.spinner = false;
+        this.returnRuta.navigate(['/lista-clientes'])
+      }).catch(err =>{
+        console.log(err);
+        this.spinner = false;
+      })
+      
       setTimeout(() => {
         this.buttionText = "Enviado!";
       }, 2000);
-    },
-    err => {
-      console.log(err);
+  /*Agregar un metodo que limpie campos sin mostrar errores cuando los datos se hayan enviado*///      this.limpiar();
+      console.log(value);
+    }else{
       this.loading = false;
       this.buttionText = "Enviar";
-    },() => {
-      this.loading = false;
-      this.buttionText = "Enviar";
+      this.estiloBoton = 'activado';
+      this.emailField?.markAsDirty;
+      this.nameField?.markAsDirty;
+      this.telefonoField?.markAsDirty;
+      this.sexoField?.markAsDirty;
+      
     }
-  );*/
+    this.estiloBoton = 'activado';
+ }
+
+  register() {
+    this.loading = true;  
+    this.buttionText = "Enviando...";
+    
+    if(this.id == null){
+      this.save(event);
+    }else{
+      this.editarClientes(this.id);
+    }
+
   }
 
-  //metodo para editar
+  //metodo actualizar el cliente
+  editarClientes(id: string){
+    this.loading = true;
+    const cliente = {
+      name: this.nameField.value,
+      email: this.emailField.value,
+      telefono: this.telefonoField.value, 
+      sexo: this.sexoField.value,
+      zfechaActualizacion: new Date()
+    }
+    this._ServiceClientes.actualizarCliente(id, cliente).then(() => {
+      this.loading = false;
+      console.log('Empleado modificado');
+      this.returnRuta.navigate(['/lista-clientes']);
+    })
+  }
+
+  //metodo para mostrar los datos en el formulario
   editarCliente(){
     this.rotuloCliente='Editar registro de Cliente';
     if(this.id !==null){
+      this.loading = true;
       this._ServiceClientes.getCliente(this.id).subscribe(data => {
-        console.log(data);
+        this.loading = false;
+        console.log(data.payload.data()['name']);
+        this.form.setValue({
+          name: data.payload.data()['name'],
+          email: data.payload.data()['email'],
+          sexo: data.payload.data()['sexo'],
+          telefono: data.payload.data()['telefono']
+        })
       })
     }
   }

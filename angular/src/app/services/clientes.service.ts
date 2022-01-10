@@ -29,4 +29,8 @@ export class ClientesService {
   getCliente(id:string):Observable<any>{
     return this.bddFirestore.collection('clientes').doc(id).snapshotChanges();
   }
+
+  actualizarCliente(id: string, data: any): Promise<any>{
+    return this.bddFirestore.collection('clientes').doc(id).update(data);
+  }
 }
