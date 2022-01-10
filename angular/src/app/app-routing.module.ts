@@ -8,6 +8,7 @@ const routes: Routes = [
   { path:'', redirectTo: 'lista-clientes', pathMatch:'full'},
   { path: 'lista-clientes', component: ListaClientesComponent},
   { path: 'form', component: FormComponent},
+  { path: 'editarCliente/:id', component: FormComponent},
   { path:'**', redirectTo: 'lista-clientes', pathMatch:'full'}
 ];
 

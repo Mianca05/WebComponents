@@ -1,7 +1,12 @@
 <div class="componente-formulario">
    
     <div class="cuadro_formulario">
-        <p class="titulo_formulario">Registro de nuevos Clientes</p>
+        <p class="titulo_formulario">{{rotuloCliente}}</p>
+        <div *ngIf="spinner" class="d-flex justify-content-center">
+            <div class="spinner-border text-success" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
         <p class="subtitulo_formulario">¡Inscríbase ahora y aproveche nuestras promociones!</p>
         <form  [formGroup]="form" novalidate (ngSubmit)="save($event)">
             <div class="celda_formulario">
@@ -13,19 +18,22 @@
                     <p class="aviso" *ngIf="nameField!.hasError('required')">
                         * Debe colocar un nombre
                     </p>
+                    <p class="aviso" *ngIf="nameField!.hasError('pattern')">
+                        * Debe contener letras
+                    </p>
                 </div>
             </div>
             <div class="celda_formulario">
                 <p>
                     Telefono:
                  <!-- <input type="text" #ced (keyup.enter)="getCedul(ced.value)"   formControlName="cedula"> -->
-                 <input type="text"  formControlName="cedula">
+                 <input type="text"  formControlName="telefono">
                 </p>
-                <div *ngIf="cedulaField!.errors &&   cedulaField!.dirty">
-                    <p class="aviso" *ngIf="cedulaField!.hasError('required')">
+                <div *ngIf="telefonoField!.errors &&   telefonoField!.dirty">
+                    <p class="aviso" *ngIf="telefonoField!.hasError('required')">
                         * Debe colocar un número de 10 digitos
                     </p>
-                    <p class="aviso" *ngIf="cedulaField!.hasError('pattern')">
+                    <p class="aviso" *ngIf="telefonoField!.hasError('pattern')">
                         * Debe contener números no letras
                     </p>
                     
@@ -48,14 +56,14 @@
             <div class="celda_formulario">
                 <p>
                     Sexo:
-                    <select formControlName="persona">
-                        <option value="Estudiante">Masculino</option>
-                        <option value="Profesor">Femenino</option>
-                        <option value="Profesional">Prefiero no decirlo</option>
+                    <select formControlName="sexo">
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                        <option value="Reservado">Prefiero no decirlo</option>
                     </select>
                 </p>
-                <div *ngIf="personaField!.errors && personaField!.dirty">
-                    <p class="aviso" *ngIf="personaField!.hasError('required')">
+                <div *ngIf="sexoField!.errors && sexoField!.dirty">
+                    <p class="aviso" *ngIf="sexoField!.hasError('required')">
                         * Debe seleccionar el tipo de persona
                     </p>
                 </div>
@@ -64,6 +72,7 @@
             
             <div class="celda_botones">
                 <button id="{{estiloBoton}}" type="submit" [disabled]="form.invalid || loading" (click)="register()">{{buttionText}}</button>  
+                <!-- <button id="{{estiloBoton}}" type="submit"  (click)="register()">{{buttionText}}</button>   -->
                 <button type="button" (click)="limpiar()" >Cancelar</button>  
             </div>
         </form>
